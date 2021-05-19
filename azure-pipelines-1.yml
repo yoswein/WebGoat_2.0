@@ -30,10 +30,29 @@ steps:
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
 
-- script: 'curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar'
-  displayName: 'Download the latest Unified Agent'
-
-- bash: ls -acl $(Build.Repository.LocalPath)
+- script: |
+    cat <<EOF > eua.config
+    apiKey=$WS_APIKEY
+    productName=PepsiPOC
+    projectName=WebGoat_2.0
+    enableImpactAnalysis=true
+    requireKnownSha1=false
+    resolveAllDependencies=false
+    maven.resolveDependencies=true
+    maven.aggregateModules=true
+    fileSystemScan=false
+    EOF
+    cat eua.config
+    echo config created successfully
+    curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
+    curl -o xModuleAnalyzer.jar https://unified-agent.s3.amazonaws.com/xModuleAnalyzer/xModuleAnalyzer-21.4.1.jar
+    echo UA downloaded successfully
+    java -jar wss-unified-agent.jar -d ./ -analyzeMultiModule multimodule.txt
+    sed -i 's/AppPath4=/AppPath4=\/webgoat-server\/target\/webgoat-server-v8.0.0.jar/1' multimodule.txt
+    echo 'multimodule.txt contents'
+    cat multimodule.txt
+    java -jar xModuleAnalyzer.jar -xModulePath multimodule.txt -fsaJarPath ./wss-unified-agent.jar -c ./eua.config -aggregateModules true
+  displayName: 'xModuleAnalyzer & UA download an run'
 
 - script: 'java -jar wss-unified-agent.jar -c wss-unified-agent.config -apiKey 4384ec56c4df4888a0465b48aeac0075c514ebd76b704630938e7dae0980f122'
   displayName: 'Run Unified Agent Scan'
