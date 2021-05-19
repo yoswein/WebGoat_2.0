@@ -32,7 +32,7 @@ steps:
 
 - script: |
     cat <<EOF > eua.config
-    apiKey=$WS_APIKEY
+    apiKey=4384ec56c4df4888a0465b48aeac0075c514ebd76b704630938e7dae0980f122
     productName=PepsiPOC
     projectName=WebGoat_2.0
     enableImpactAnalysis=true
