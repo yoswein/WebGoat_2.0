@@ -21,5 +21,5 @@ steps:
 - script: 'curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar'
   displayName: 'Download the latest Unified Agent'
 
-- script: 'java -jar wss-unified-agent.jar -c wss-unified-agent.config -apiKey 4384ec56c4df4888a0465b48aeac0075c514ebd76b704630938e7dae0980f122 -project WebGoat_2.0'
+- script: 'java -jar wss-unified-agent.jar -c wss-unified-agent.config -apiKey 4384ec56c4df4888a0465b48aeac0075c514ebd76b704630938e7dae0980f122'
   displayName: 'Run Unified Agent Scan'
